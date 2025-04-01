@@ -1,0 +1,5 @@
+# Training script
+PYTHONPATH=.. python3 ../src/run.py "CNN_100_bullseye.yaml"
+
+# Inference script
+PYTHONPATH=.. python3 ../src/inference_bullseye.py "CNN_100_bullseye.yaml"

@@ -1,0 +1,5 @@
+# Run trainin script
+PYTHONPATH=.. python3 ../src/run.py "CNN_250_bullseye.yaml"
+
+# Run inference script
+PYTHONPATH=.. python3 ../src/inference_bullseye.py "CNN_250_bullseye.yaml"
