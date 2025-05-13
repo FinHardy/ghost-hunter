@@ -1,13 +1,26 @@
 # ghost-hunter
 
+TODO: Create way of doing inference on multiple dm4 files  
+
+## Project Workflow: 
+
+### Training (only need to do once)
+- Retrieve dm4 files
+- Turn to png using `scripts/dm4_to_png.py` 
+- Label 500 images or so using `labelling/binary_search_labelling`
+- setup yaml file with location of png files and select model settings
+- train on labelled images using `src/run.py`
+- Run inference using checkpoint using `src/inference.py` (real space segmentation will be output to `images/`)
+
+### Inference
+- Retrieve dm4 files
+- Turn to png using `scripts/dm4_to_png.py` 
+- setup yaml file with location of png files and select model settings
+- Run inference using checkpoint using `src/inference.py` (real space segmentation will be output to `images/`)
+
 >[!NOTE]
 > All the file imports have been setup so that they are relative to the top folder. 
 > So that when you reference files in the config files, always use folder paths relative to the top repo folder.
-
-## Labelling
-run `python labelling/gui_labeller.py` to start labelling images. Where the filename and label are pasted into labels.yaml. 
-
-The labelled training data files from the paper are also contained within the `labelling/` directory.
 
 ## Usage 
 

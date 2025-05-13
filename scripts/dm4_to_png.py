@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 
 import matplotlib.pyplot as plt
 import py4DSTEM
@@ -9,8 +10,8 @@ from tqdm import tqdm
 def save_dm4_BF_to_png(
     *files,
     crop: bool = False,
-    binning_param: int = 2,
-    crop_values: tuple[int, int, int, int],  # x_min, x_max, y_min, y_max
+    binning_param: int = 1,
+    crop_values: Optional[tuple[int, int, int, int]],  # x_min, x_max, y_min, y_max
 ):
     """
     Description:

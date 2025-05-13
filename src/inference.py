@@ -64,52 +64,16 @@ class ImageDataset(torch.utils.data.Dataset):
         return image_tensor.to(self.device)
 
 
-def plot_embeddings(
-    config_file: str, dim1: int = 358, dim2: int = 354, save_path: str = "./images/"
+def output_polarisation_image(
+    _config: Config,
+    model,
+    stem_image_dir: str,
+    save_path: str,
+    dim1: int = 358,
+    dim2: int = 354,
 ):
-    """
-    Description: Extracts the embeddings from the network and plots them to a figure
-
-    IMPORTANT: Have to make sure that the embedding size of the model is the same
-    as the embedding size in the config file
-
-    Args:
-    - data (torch.Tensor): Input data
-    - batch_size (int): Batch size for processing
-    - _config (Config): Configuration settings
-    - save_path (str): Path to save the plot
-
-    Returns:
-    - torch.Tensor: Embeddings from the encoder
-    """
-    _config = Config.from_yaml(os.path.join(ABS_PATH, "../", "configs", config_file))
-
-    ex_description = _config.wandb.ex_description
-
-    model_class = _config.model.model_name
-    if model_class:
-        model = models[model_class](_config)
-    else:
-        raise ValueError(f"Model '{_config.model.model_name}' is not recognized.")
-
-    model.to(_config.accelerator)
-
-    # WARNING: this is just a hack to get the model to load the best weights within a file
-    # to automate the inference process after training
-    route_to_checkpoints = os.path.join(
-        ABS_PATH, "../checkpoints", _config.test.load_path
-    )
-
-    best_checkpoint = str(os.listdir(route_to_checkpoints)[-1])
-    print(best_checkpoint)
-
-    test_load_path = os.path.join(route_to_checkpoints, best_checkpoint)
-
-    load_state_dict(model, test_load_path, _config.accelerator)
-
-    stem_image_dir = os.path.join(ABS_PATH, "../", _config.data.data_dir)
-    assert os.path.exists(stem_image_dir), "Data directory does not exist"
     image_list: list = []
+    ex_description = _config.wandb.ex_description
 
     for root, _, files in os.walk(stem_image_dir):
         for file in files:
@@ -163,6 +127,71 @@ def plot_embeddings(
     )
 
     print(f"Plot saved to {plot_save_path}")
+
+
+def plot_embeddings(config_file: str, save_path: str = "./images/"):
+    """
+    Description: Extracts the embeddings from the network and plots them to a figure
+
+    IMPORTANT: Have to make sure that the embedding size of the model is the same
+    as the embedding size in the config file
+
+    Args:
+    - data (torch.Tensor): Input data
+    - batch_size (int): Batch size for processing
+    - _config (Config): Configuration settings
+    - save_path (str): Path to save the plot
+
+    Returns:
+    - torch.Tensor: Embeddings from the encoder
+    """
+    _config = Config.from_yaml(os.path.join(ABS_PATH, "../", "configs", config_file))
+
+    model_class = _config.model.model_name
+    if model_class:
+        model = models[model_class](_config)
+    else:
+        raise ValueError(f"Model '{_config.model.model_name}' is not recognized.")
+
+    model.to(_config.accelerator)
+
+    # WARNING: this is just a hack to get the model to load the best weights within a file
+    # to automate the inference process after training
+    route_to_checkpoints = os.path.join(
+        ABS_PATH, "../checkpoints", _config.test.load_path
+    )
+
+    best_checkpoint = str(os.listdir(route_to_checkpoints)[-1])
+    print(f"Best checkpoint: {best_checkpoint}")
+
+    test_load_path = os.path.join(route_to_checkpoints, best_checkpoint)
+
+    load_state_dict(model, test_load_path, _config.accelerator)
+
+    stem_image_dir = os.path.join(ABS_PATH, "../", _config.data.data_dir)
+    assert os.path.exists(stem_image_dir), "Data directory does not exist"
+
+    # check if directory contains folders instead of files
+    print(
+        "Checking if multiple diffraction files exist (so we can do multiple in a row)"
+    )
+    for _, dirs, _ in os.walk(stem_image_dir):
+        if len(dirs) > 0:
+            for dir in dirs:
+                output_polarisation_image(
+                    _config,
+                    model,
+                    os.path.join(stem_image_dir, dir),
+                    os.path.join("images", dir),
+                )
+        else:
+            print("No directories found, so just doing one image")
+            output_polarisation_image(
+                _config,
+                model,
+                stem_image_dir,
+                os.path.join("images", "single_image"),
+            )
 
 
 if __name__ == "__main__":
