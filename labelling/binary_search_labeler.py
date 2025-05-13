@@ -1,8 +1,9 @@
 """
 This script is used to label images in a directory using a GUI.
-It uses a binary search algorithm to find the next best point to label.
-HUGE DISCLAIMER: This code is far from optimised and I probably never will optimise it. But it works and for the purposes of this study it has been more than sufficient.
+It initially uses a grid like sampling pattern.
+Then uses a binary search algorithm to find the next best point to label.
 
+NOTE: At the moment you have to do all the labelling in one go and you cannot continue from a checkpoint.
 """
 
 import os

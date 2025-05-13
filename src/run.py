@@ -14,7 +14,7 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 
 from src.config import Config
 from src.datasets import RawPngLoader
-from src.models import ThreeLayerCnn
+from src.models import ResidualCNN, ThreeLayerCnn
 
 ABS_PATH: str = os.path.abspath(os.path.dirname(__file__))
 
@@ -29,6 +29,7 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 models: Dict = {
     "ThreeLayerCnn": ThreeLayerCnn,
+    "ResidualCNN": ResidualCNN,
 }
 
 datamodules: Dict = {"RawPngLoader": RawPngLoader}

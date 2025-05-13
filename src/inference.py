@@ -9,7 +9,7 @@ from torchvision import transforms
 from tqdm import tqdm
 
 from src.config import Config
-from src.models import ThreeLayerCnn
+from src.models import ResidualCNN, ThreeLayerCnn
 from src.utils import load_state_dict
 
 torch.set_default_dtype(torch.float32)
@@ -17,6 +17,7 @@ torch.set_float32_matmul_precision("medium")
 
 models = {
     "ThreeLayerCnn": ThreeLayerCnn,
+    "ResidualCNN": ResidualCNN,
 }
 
 ABS_PATH = os.path.abspath(os.path.dirname(__file__))
