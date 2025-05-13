@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import torch
 import torch.nn as nn
 
 from src.config import Config
@@ -34,7 +33,7 @@ class ResidualBlock(nn.Module):
 
 
 class ResidualCNN(BaseModel):
-    def __init__(self, _config):
+    def __init__(self, _config: Config):
         super(ResidualCNN, self).__init__(_config)
 
         self.task = _config.task  # assuming _config has an attribute `task`
@@ -74,17 +73,15 @@ class ResidualCNN(BaseModel):
 
     def visualise_feature_maps(self, x, layer_idx):
         if layer_idx == 1:
-            x = self.relu(self.conv1(x))
+            x = self.pool(self.block1(x))
         elif layer_idx == 2:
-            x = self.relu(self.conv1(x))
-            x = self.max_pool2d(x)
-            x = self.relu(self.conv2(x))
+            x = self.pool(self.block1(x))
+            x = self.pool(self.block2(x))
         elif layer_idx == 3:
-            x = self.relu(self.conv1(x))
-            x = self.max_pool2d(x)
-            x = self.relu(self.conv2(x))
-            x = self.max_pool2d(x)
-            x = self.relu(self.conv3(x))
+            x = self.pool(self.block1(x))
+            x = self.pool(self.block2(x))
+            x = self.pool(self.block3(x))
+
         else:
             raise ValueError("Layer index must be between 1 and 3")
 
