@@ -1,0 +1,59 @@
+seed: 42
+test_only: False
+accelerator: "cuda"
+
+data:
+  data_dir: "data/png/2025-05-30-test"
+  train_dir: "data/png/2025-05-30-test"
+  data_loader: "RawPngLoader"
+  train_ratio: 0.9
+  val_ratio: 0.05
+  test_ratio: 0.05
+  num_workers: 4
+  augment: False
+  image_size: 256
+  labels_file: "labels.yaml"
+
+wandb:
+  project_name: "polarisation_mapping-live"
+  run_name: "first run experiment"
+  experiment_id: "1"
+  ex_description: "Running first experiment to test the pipeline with simple model"
+
+model:
+  in_channels: 1
+  batch_size: 8
+  model_name: "ThreeLayerCNN"
+  accuracy_metric: "cross_entropy"
+
+optimizer:
+  optimizer: "adamw"
+  lr: 0.0004
+  weight_decay: 0.002
+  momentum: 0.9
+  betas: [0.9, 0.999]
+
+scheduler:
+  scheduler: "plateau"
+  step_size: 30
+  step_size_up: 1000
+  patience: 2
+  factor: 0.5
+  min_lr: 3e-5
+  max_lr: 5e-5
+  T_max: 10
+  gamma: 0.1
+
+trainer:
+  num_nodes: 1
+  devices: 1
+  max_epochs: 100
+  log_dir: "./logs"
+  log_every_n_steps: 100
+  load_path: ""
+  resume_from: False 
+  checkpoint_dir: "./checkpoints/2025-05-30-testing/"
+  wandb_logging: True
+
+test: 
+  load_path: "./checkpoints/2025-05-30-testing"

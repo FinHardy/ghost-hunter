@@ -416,6 +416,22 @@ class LabelingApp:
             self.load_file()
 
 
+def label(png_images_file_path, labels_output_file, labels_to_assign, step=20):
+    """
+    Function to label files in a directory using the LabelingApp GUI.
+    """
+    root = tk.Tk()
+    app = LabelingApp(
+        root,
+        png_images_file_path,
+        output_file=labels_output_file,
+        labels_to_assign=labels_to_assign,
+        step=step,
+    )
+    print(f"Loaded {len(app)} files.")
+    root.mainloop()
+
+
 if __name__ == "__main__":
     # Create the GUI
     root = tk.Tk()

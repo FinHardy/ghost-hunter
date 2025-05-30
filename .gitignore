@@ -9,6 +9,7 @@ __pycache__/
 # misc 
 .DS_Store
 .vscode/
+wandb_key.txt
 
 
 # Distribution / packaging
