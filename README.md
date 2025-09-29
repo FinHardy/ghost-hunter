@@ -2,9 +2,9 @@
 
 TODO: Create way of doing inference on multiple dm4 files  
 
-## Project Workflow: 
+## Project Workflow: 
 
-### Training (only need to do once)
+### Training (only need to do once)
 - Retrieve dm4 files
 - Turn to png using `scripts/dm4_to_png.py` 
 - Label 500 images or so using `labelling/binary_search_labelling`
