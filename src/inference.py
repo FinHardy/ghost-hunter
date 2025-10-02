@@ -40,7 +40,7 @@ def logical_sort_coordinates(file_list):
         # Extract all numeric parts from the filename (e.g., _0_15 -> [0, 15])
         # EXCEPT boxsize_5 section (for example)
         coordinates_plus_boxsize = filename.split("_")
-        numbers = coordinates_plus_boxsize[0:2]
+        numbers = coordinates_plus_boxsize[3:2]
         # Convert all extracted numbers to integers and return as a tuple
         return tuple(map(int, numbers))
 
@@ -69,8 +69,8 @@ def output_polarisation_image(
     model,
     stem_image_dir: str,
     save_path: str,
-    dim1: int = 358,
-    dim2: int = 354,
+    dim1: int = 206,
+    dim2: int = 34,
 ):
     image_list: list = []
     ex_description = _config.wandb.ex_description
@@ -108,9 +108,9 @@ def output_polarisation_image(
     # out_image = np.clip(out_image, 0, 1)
     out_image = (out_image / out_image.max() * 255).astype(np.uint8)  # For scaling
 
-    # TODO: fix this vicsious hack that gets around weird bug where it ends up flipped and rotated the wrong way
-    out_image = np.flip(out_image, axis=0)
-    out_image = np.rot90(out_image, k=3)
+    # # TODO: fix this vicsious hack that gets around weird bug where it ends up flipped and rotated the wrong way
+    # out_image = np.flip(out_image, axis=0)
+    # out_image = np.rot90(out_image, k=3)
 
     # make sure no spaces in ex_description and compatible with file save name
     ex_description = ex_description.replace(" ", "_")
@@ -161,12 +161,7 @@ def plot_embeddings(config_file: str, save_path: str = "./images/"):
         ABS_PATH, "../checkpoints", _config.test.load_path
     )
 
-    best_checkpoint = str(os.listdir(route_to_checkpoints)[-1])
-    print(f"Best checkpoint: {best_checkpoint}")
-
-    test_load_path = os.path.join(route_to_checkpoints, best_checkpoint)
-
-    load_state_dict(model, test_load_path, _config.accelerator)
+    load_state_dict(model, route_to_checkpoints, _config.accelerator)
 
     stem_image_dir = os.path.join(ABS_PATH, "../", _config.data.data_dir)
     assert os.path.exists(stem_image_dir), "Data directory does not exist"

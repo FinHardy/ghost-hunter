@@ -33,6 +33,11 @@ def logical_sort_coordinates(file_list):
         # Extract all numeric parts from the filename (e.g., _0_15 -> [0, 15])
         # EXCEPT boxsize_5 section (for example)
         coordinates_plus_boxsize = filename.split("_")
+        # make 0 index position at 1 index and 1 index at zero position
+        coordinates_plus_boxsize[0], coordinates_plus_boxsize[1] = (
+            coordinates_plus_boxsize[1],
+            coordinates_plus_boxsize[0],
+        )
         numbers = coordinates_plus_boxsize[0:2]
         # Convert all extracted numbers to integers and return as a tuple
         return tuple(map(int, numbers))
@@ -113,8 +118,14 @@ class LabelingApp:
         # get dimension of scan
         final_file = self.file_list[-1]
         self.dimensions = final_file.split("_")[0:2]
-        self.height = int(self.dimensions[0]) + 1
-        self.width = int(self.dimensions[1]) + 1
+        # self.height = int(self.dimensions[0]) + 1
+        # self.width = int(self.dimensions[1]) + 1
+
+        # TEMPORARY
+        self.width = int(self.dimensions[0]) + 1
+        self.height = int(self.dimensions[1]) + 1
+
+        print(f"Image dimensions: {self.height} x {self.width}")
 
         # reshape the file list to an array of width, height
         self.file_list_array = np.array(self.file_list)
@@ -373,7 +384,7 @@ class LabelingApp:
             out_image = np.flip(out_image, axis=0)
             out_image = np.rot90(out_image, k=3)
             plt.imsave(
-                f"{os.path.splitext(self.output_file)}_sparse_label_plot",
+                f"{os.path.splitext(self.output_file)[0]}_sparse_label_plot.png",
                 out_image,
                 cmap="viridis",
                 vmin=0,
@@ -433,14 +444,15 @@ def label(png_images_file_path, labels_output_file, labels_to_assign, step=20):
 
 
 if __name__ == "__main__":
+    ABS_PATH = os.path.dirname(os.path.abspath(__file__))
     # Create the GUI
     root = tk.Tk()
     app = LabelingApp(
         root,
-        "your_data_here",
-        output_file="50_labels_opt_strat_75_step.yaml",
+        file_path=os.path.join(ABS_PATH, "../data/conference/boxed_png/"),
+        output_file=os.path.join(ABS_PATH, "conference_data_50_binary.yaml"),
         labels_to_assign=50,
-        step=75,
+        step=15,
     )
     print(f"Loaded {len(app)} files.")
     root.mainloop()

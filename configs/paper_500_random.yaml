@@ -1,29 +1,29 @@
-seed: 50
+seed: 42
 test_only: False
 accelerator: "cuda"
 task: "binary"
 
 data:
-  data_dir: "../data/dm4/Diffraction_SI_averaged_images/"
-  train_dir: "../data/dm4/Diffraction_SI_averaged_images/"
+  data_dir: "data/paper_data/boxed_png/"
+  train_dir: "data/paper_data/boxed_png/frame_1_boxed5_bin1"
   data_loader: "RawPngLoader"
-  train_ratio: 0.9
-  val_ratio: 0.05
-  test_ratio: 0.05
+  train_ratio: 0.8
+  val_ratio: 0.1
+  test_ratio: 0.1
   num_workers: 4
   augment: False
   image_size: 256
-  labels_file: "bullseye_500_labels.yaml"
+  labels_file: "paper_data_500_random_frame_1_labels.yaml"
 
 wandb:
-  project_name: "polarisation_mapping"
-  run_name: "Simple CNN with bin5 cropped images"
-  experiment_id: "9"
-  ex_description: "CNN_bullseye_500_labels"
+  project_name: "polarisation_mapping-live"
+  run_name: ""
+  experiment_id: "1"
+  ex_description: "paper_500_labels_random_algo"
 
 model:
   in_channels: 1
-  batch_size: 8
+  batch_size: 32
   model_name: "ThreeLayerCnn"
   accuracy_metric: "cross_entropy"
 
@@ -48,13 +48,13 @@ scheduler:
 trainer:
   num_nodes: 1
   devices: 1
-  max_epochs: 200
+  max_epochs: 250
   log_dir: "./logs"
   log_every_n_steps: 100
   load_path: ""
   resume_from: False 
-  checkpoint_dir: "CNN-bullseye_500-take-2"
-  wandb_logging: True
+  checkpoint_dir: "paper_500_random/"
+  wandb_logging: False
 
 test: 
-  load_path: "CNN-bullseye_500-take-2"
+  load_path: "paper_500_random"
