@@ -54,7 +54,7 @@ class ResidualCNN(BaseModel):
         if self.task == "polar":
             self.fc2 = nn.Linear(128, 1)
         elif self.task == "binary":
-            self.fc2 = nn.Linear(128, 3)
+            self.fc2 = nn.Linear(128, 4)
         else:
             raise ValueError(f"Unknown task type: {self.task}")
 

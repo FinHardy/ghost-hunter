@@ -17,7 +17,7 @@ class ThreeLayerCnn(BaseModel):
         if self.task == "polar":
             self.fc2 = nn.Linear(128, 1)
         elif self.task == "binary":
-            self.fc2 = nn.Linear(128, 3)
+            self.fc2 = nn.Linear(128, 4)
 
         self.relu = nn.ReLU()
         self.max_pool2d = nn.MaxPool2d(2, 2)
@@ -31,7 +31,7 @@ class ThreeLayerCnn(BaseModel):
         x = self.max_pool2d(x)  # B, 64, 64, 64 -> B, 32, 32, 64
         x = x.view(x.size(0), -1)  # B, 32, 32, 64 -> B, 32 * 32 * 64
         x = self.relu(self.fc1(x))  # B, 32 * 32 * 64 -> B, 128
-        x = self.fc2(x)  # B, 128 -> B, 3
+        x = self.fc2(x)  # B, 128 -> B, 4
         return x
 
     def visualise_feature_maps(self, x, layer_idx):

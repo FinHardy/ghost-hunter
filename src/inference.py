@@ -94,8 +94,13 @@ def output_polarisation_image(
             image.to(_config.accelerator)
             output = model(image)
             # apply softmax to output
-            output = torch.nn.functional.softmax(output, dim=1)
-            output_list.append(output.cpu())
+            output = torch.nn.functional.softmax(output, dim=1) # (N, 4)
+
+            rgb = output[:, :3]
+            darkness = output[:, 3:4]
+
+            rgb = rgb * (1 - darkness)
+            output_list.append(rgb.cpu())
 
     all_outputs = np.array(output_list)
 

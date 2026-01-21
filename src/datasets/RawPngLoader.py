@@ -52,6 +52,7 @@ class RawPngDataset(Dataset):
             "na": 0,
             "vertical": 1,
             "horizontal": 2,
+            "mixed_hv": 3,
         }
 
     def __len__(self):

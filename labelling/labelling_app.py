@@ -96,6 +96,15 @@ class LabelingApp:
         )
         self.button_2.pack(side=tk.RIGHT, padx=20, pady=20)
 
+        self.button_3 = tk.Button(
+            master,
+            text="Mixed H/V",
+            command=self.label_3,
+            bg="blue",
+            font=("Arial", 14),
+        )
+        self.button_3.pack(side=tk.BOTTOM, padx=20, pady=20)
+
         # Load first file
         self.load_file()
 
@@ -137,6 +146,8 @@ class LabelingApp:
             self.image_label.config(image="")
             self.button_0.config(state=tk.DISABLED)
             self.button_1.config(state=tk.DISABLED)
+            self.button_2.config(state=tk.DISABLED)
+            self.button_3.config(state=tk.DISABLED)
             # shut down app
             print("All files labeled. Shutting down.")
             self.master.quit()
@@ -154,6 +165,11 @@ class LabelingApp:
     def label_2(self):
         if self.current_file:
             save_label(self.current_file, "na")
+            self.load_file()
+
+    def label_3(self):
+        if self.current_file:
+            save_label(self.current_file, "mixed_hv")
             self.load_file()
 
 
