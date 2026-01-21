@@ -18,10 +18,10 @@ from src.models import ResidualCNN, ThreeLayerCnn
 
 ABS_PATH: str = os.path.abspath(os.path.dirname(__file__))
 
-with open(os.path.join(ABS_PATH, "../", "wandb_key.txt"), "r") as f:
-    key = f.read().strip()
+# with open(os.path.join(ABS_PATH, "../", "wandb_key.txt"), "r") as f:
+#     key = f.read().strip()
 
-wandb.login(key=key)
+# wandb.login(key=key)
 
 # Add the parent directory to the Python path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
